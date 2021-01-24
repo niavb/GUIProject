@@ -57,7 +57,7 @@ public class HabitTracker extends JFrame {
 	public static void main(String[] args) {
 
 		JFrame frame = new JFrame("Habit Tracker");
-		frame.setSize(500, 200);
+		frame.setSize(1550, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// main containers and Layouts
@@ -65,19 +65,38 @@ public class HabitTracker extends JFrame {
 		frame.add(mainPanel);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 
-		JPanel leftPanel = new JPanel();
-		mainPanel.add(leftPanel);
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+		// using as border between tablePanel and the left frame
+		JPanel leftBorderPanel = new JPanel();
+		mainPanel.add(leftBorderPanel);
+		leftBorderPanel.setBackground(Color.LIGHT_GRAY);
+		leftBorderPanel.setPreferredSize(new Dimension(10, 300));
+
+		JPanel tablePanel = new JPanel();
+		mainPanel.add(tablePanel);
+		tablePanel.setPreferredSize(new Dimension(1300, 300));
+		tablePanel.setBackground(Color.LIGHT_GRAY);
+		tablePanel.setLayout(new BoxLayout(tablePanel, BoxLayout.Y_AXIS));
+
+		// using as border between tablePanel and rightPanel
+		JPanel rightBorderPanel = new JPanel();
+		mainPanel.add(rightBorderPanel);
+		rightBorderPanel.setBackground(Color.LIGHT_GRAY);
+		rightBorderPanel.setPreferredSize(new Dimension(10, 300));
 
 		JPanel rightPanel = new JPanel();
 		mainPanel.add(rightPanel);
+		rightPanel.setBackground(Color.WHITE);
+		rightPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
 		// left side
-		JLabel habitTrackerLabel = new JLabel("Here is your progress: ");
-		leftPanel.add(habitTrackerLabel);
+
+		// using as upper border of table
+		JLabel habitTrackerLabel = new JLabel(" ");
+		tablePanel.add(habitTrackerLabel);
 
 		// Table
+		
 		// using DefaultTableModel for its methods like addRow(), addColumn()...
 		DefaultTableModel habitsTableModel = new DefaultTableModel();
 		JTable habitsTable = new JTable(habitsTableModel) {
@@ -113,12 +132,12 @@ public class HabitTracker extends JFrame {
 		habitsTable.getTableHeader().setReorderingAllowed(false);
 
 		habitsTableModel.addColumn("Days");
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 31; i++) {
 			habitsTableModel.addColumn(String.valueOf(i + 1));
 		}
 
 		habitsTableModel.insertRow(0, new Object[] { "Habits" });
-		leftPanel.add(new JScrollPane(habitsTable));
+		tablePanel.add(new JScrollPane(habitsTable));
 
 		// get stored table from file
 		ObjectInputStream ois = null;
@@ -134,10 +153,23 @@ public class HabitTracker extends JFrame {
 		} catch (Exception e) {
 		}
 
+		// using as down border of table
+		JLabel label = new JLabel(" ");
+		tablePanel.add(label);
+
 		// right side
+
 		// for layout setting
 		rightPanel.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
+
+		JLabel checkLabel = new JLabel("Choose habit to check: ");
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		gbc.gridwidth = 2;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		rightPanel.add(checkLabel, gbc);
 
 		// drop-down menu
 		ArrayList<String> dropDownMenuHabits = new ArrayList<String>();
@@ -158,14 +190,14 @@ public class HabitTracker extends JFrame {
 		}
 		// set layout
 		gbc.gridx = 1;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		gbc.gridwidth = 2;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		rightPanel.add(dropDownMenu, gbc);
 
 		JButton doneButton = new JButton("Done");
 		gbc.gridx = 2;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.gridwidth = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		rightPanel.add(doneButton, gbc);
@@ -178,7 +210,7 @@ public class HabitTracker extends JFrame {
 
 		JButton missedButton = new JButton("Missed");
 		gbc.gridx = 1;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.gridwidth = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		rightPanel.add(missedButton, gbc);
@@ -189,16 +221,23 @@ public class HabitTracker extends JFrame {
 			}
 		});
 
+		JLabel addLabel = new JLabel("Write habit to add: ");
+		gbc.gridx = 1;
+		gbc.gridy = 4;
+		gbc.gridwidth = 2;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		rightPanel.add(addLabel, gbc);
+
 		JTextField addHabit = new JTextField();
 		gbc.gridx = 1;
-		gbc.gridy = 3;
+		gbc.gridy = 5;
 		gbc.gridwidth = 2;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		rightPanel.add(addHabit, gbc);
 
 		JButton addButton = new JButton("Add habit");
 		gbc.gridx = 1;
-		gbc.gridy = 4;
+		gbc.gridy = 6;
 		gbc.gridwidth = 2;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		rightPanel.add(addButton, gbc);
